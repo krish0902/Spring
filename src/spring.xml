@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util"
+xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"  default-init-method="myInit" default-destroy-method="cleanUp">
+
+	
+
+	<bean id="parenttriangle" class="org.sai.java.Triangle" abstract ="true">
+		<property name="points">
+		<list>
+		<ref bean="pointA"/>
+		</list>
+		</property>
+	</bean>
+
+
+	<bean id="triangle1" class="org.sai.java.Triangle" parent="parenttriangle"  scope="singleton"  name="triangle-name">
+		<property name="points">
+			<list merge="true">
+				<ref bean="pointB"/>
+			</list>
+		</property>
+		
+	</bean>
+	
+	
+	<bean id="pointA" class ="org.sai.java.Point" >
+		<qualifier value="circleRelated" />
+		<property name="x" value="${pointA.pointX}" />
+		<property name="y" value="${pointA.pointY}" />
+	</bean>
+	
+	<bean id="pointB" class ="org.sai.java.Point" >
+		<property name="x" value="-20" />
+		<property name="y" value="0" />
+	</bean>
+	
+	<bean id="pointC" class ="org.sai.java.Point" >
+		<property name="x" value="20" />
+		<property name="y" value="0" />
+	</bean>
+
+	<alias name="triangle" alias="triangle-alias"/>
+	
+<!-- 	<bean class="org.sai.java.DisplayNameBeanPostProcessor" />
+ -->
+ 
+ 	<!-- <bean class="org.sai.java.MyBeanFactoryPP"></bean> -->
+ 	
+ 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+ 		<property name="locations" value="pointsconfig.properties" />
+ 	</bean>
+ 	
+ 	
+ 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+ 		<property name="basenames">
+ 			<list>
+ 				<value>mymessages</value>
+ 			</list>
+ 		</property>
+ 	</bean>
+ 	
+ 	
+ 	<context:component-scan base-package="org.sai.java"></context:component-scan>
+ 	
+ 	
+ 	<context:annotation-config/>
+ 	
+</beans>
